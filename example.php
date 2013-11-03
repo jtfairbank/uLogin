@@ -24,25 +24,27 @@ function isAppLoggedIn(){
 	return isset($_SESSION['uid']) && isset($_SESSION['username']) && isset($_SESSION['loggedIn']) && ($_SESSION['loggedIn']===true);
 }
 
-function appLogin($uid, $username, $ulogin){
-	$_SESSION['uid'] = $uid;
-	$_SESSION['username'] = $username;
-	$_SESSION['loggedIn'] = true;
+class LoginDone {
+  public static function appLogin($uid, $username, $ulogin){
+	  $_SESSION['uid'] = $uid;
+	  $_SESSION['username'] = $username;
+	  $_SESSION['loggedIn'] = true;
 
-	if (isset($_SESSION['appRememberMeRequested']) && ($_SESSION['appRememberMeRequested'] === true))
-	{
-		// Enable remember-me
-		if ( !$ulogin->SetAutologin($username, true))
-			echo "cannot enable autologin<br>";
+	  if (isset($_SESSION['appRememberMeRequested']) && ($_SESSION['appRememberMeRequested'] === true))
+	  {
+		  // Enable remember-me
+		  if ( !$ulogin->SetAutologin($username, true))
+			  echo "cannot enable autologin<br>";
 
-		unset($_SESSION['appRememberMeRequested']);
-	}
-	else
-	{
-		// Disable remember-me
-		if ( !$ulogin->SetAutologin($username, false))
-			echo 'cannot disable autologin<br>';
-	}
+		  unset($_SESSION['appRememberMeRequested']);
+	  }
+	  else
+	  {
+		  // Disable remember-me
+		  if ( !$ulogin->SetAutologin($username, false))
+			  echo 'cannot disable autologin<br>';
+	  }
+  }
 }
 
 function appLoginFail($uid, $username, $ulogin){
@@ -73,7 +75,9 @@ $action = @$_POST['action'];
 // We construct an instance and pass a function handle to our
 // callback functions (we have just defined 'appLogin' and
 // 'appLoginFail' a few lines above).
-$ulogin = new uLogin('appLogin', 'appLoginFail');
+//
+// You can pass global functions or static class functions.
+$ulogin = new uLogin('LoginDone::appLogin', 'appLoginFail');
 
 
 // First we handle application logic. We make two cases,
