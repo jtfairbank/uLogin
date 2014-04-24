@@ -136,7 +136,7 @@ class uLogin
 		if (is_callable($this->LoginFailCallback))
 		{
 			$callback = $this->LoginFailCallback;
-			$callback($uid, $username, $this);
+			call_user_func($callback, $uid, $username, $this);
 		}
 	}
 
